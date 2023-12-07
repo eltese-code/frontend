@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:foxaac_app/features/feed/test_feed_screen_light.dart';
+import 'package:foxaac_app/features/home/ladder_screen.dart';
+import 'package:foxaac_app/features/mypage/mypage_screen.dart';
 import 'package:foxaac_app/features/presentation/book_list_screen.dart';
 import 'package:foxaac_app/ui/app_scaffold.dart';
-import 'package:foxaac_app/ui/screens/feed/test_feed_screen_light.dart';
-import 'package:foxaac_app/ui/screens/home/ladder_screen.dart';
-import 'package:foxaac_app/ui/screens/mypage/mypage_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class ScreenPaths {
@@ -50,11 +50,51 @@ final appRouter = GoRouter(
     GoRoute(
       path: ScreenPaths.bookList,
       name: '/bookList',
-      pageBuilder: (context, state) => CupertinoPage(
+      pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
         child: const BookListScreen(),
-        fullscreenDialog: true,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
       ),
     ),
+
+    // GoRoute(
+    //   path: ScreenPaths.bookList,
+    //   name: '/bookList',
+    //   pageBuilder: (context, state) => const CupertinoPage(child: BookListScreen()),
+    // ),
+
+    // AppRoute('/bookList', const BookListScreen(), useFade: true)
   ],
 );
+
+class AppRoute extends GoRoute {
+  AppRoute(
+    String path,
+    Widget widget, {
+    List<GoRoute> routes = const [],
+    this.useFade = false,
+  }) : super(
+          path: path,
+          routes: routes,
+          pageBuilder: (context, state) {
+            // final pageContent = widget;
+            // Scaffold(
+            //   body: widget,
+            //   resizeToAvoidBottomInset: false,
+            // );
+            if (useFade) {
+              return CustomTransitionPage(
+                key: state.pageKey,
+                child: widget,
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              );
+            }
+            return CupertinoPage(child: widget);
+          },
+        );
+  final bool useFade;
+}

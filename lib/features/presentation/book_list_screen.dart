@@ -10,22 +10,31 @@ class BookListScreen extends StatefulWidget {
 class _BookListScreenState extends State<BookListScreen> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          floating: true,
-          elevation: 0,
-          title: const Text('나의 서재'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                //
-              },
-              icon: const Icon(Icons.search),
-            )
-          ],
-        )
-      ],
+    // return Container(
+    //   child: const Text('dd'),
+    // );
+
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            // floating: true,
+            elevation: 0,
+            title: const Text('나의 서재'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  //
+                },
+                icon: const Icon(Icons.search),
+              )
+            ],
+          ),
+          const SliverToBoxAdapter(
+            child: Text('data'),
+          )
+        ],
+      ),
     );
   }
 }
