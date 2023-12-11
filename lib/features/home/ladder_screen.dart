@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foxaac_app/assets.dart';
+import 'package:foxaac_app/features/book_search/api_network_service.dart';
 import 'package:go_router/go_router.dart';
 
 class LadderScreen extends StatefulWidget {
@@ -13,6 +15,10 @@ class LadderScreen extends StatefulWidget {
 class _LadderScreenState extends State<LadderScreen> {
   @override
   Widget build(BuildContext context) {
+    Dio dio = Dio();
+    final DioNetworkService dioNetworkService = DioNetworkService(dio);
+    // dioNetworkService.get(AppConfigs.naverApiBaseUrl);
+
     final size = MediaQuery.of(context).size;
     final List bookList = [
       '지구 끝의 온실',
@@ -139,8 +145,7 @@ class ListItem extends StatelessWidget {
       ),
       child: Text(
         bookList[index],
-        style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
       ),
     );
   }

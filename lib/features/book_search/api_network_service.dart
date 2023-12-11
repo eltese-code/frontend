@@ -24,6 +24,9 @@ class DioNetworkService {
       };
 
   Future get(String endpoint, {Map<String, dynamic>? queryParameters}) {
+    // endpoint =
+    queryParameters = {'query': 'ㅏ'};
+
     final res = dio.get(baseUrl, queryParameters: queryParameters);
     // // handleException(
     // //   () =>
