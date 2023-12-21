@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foxaac_app/features/book_search/presentation/custom_search_delegate.dart';
 
 class BookListScreen extends StatefulWidget {
   const BookListScreen({super.key});
@@ -10,10 +11,6 @@ class BookListScreen extends StatefulWidget {
 class _BookListScreenState extends State<BookListScreen> {
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   child: const Text('dd'),
-    // );
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -24,7 +21,8 @@ class _BookListScreenState extends State<BookListScreen> {
             actions: [
               IconButton(
                 onPressed: () {
-                  //
+                  // context.pushNamed('/searchList');
+                  showSearch(context: context, delegate: CustomSearchDelegate());
                 },
                 icon: const Icon(Icons.search),
               )

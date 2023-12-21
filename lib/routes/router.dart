@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:foxaac_app/features/book_search/presentation/book_search_list_screen.dart';
 import 'package:foxaac_app/features/feed/test_feed_screen_light.dart';
 import 'package:foxaac_app/features/home/ladder_screen.dart';
 import 'package:foxaac_app/features/mypage/mypage_screen.dart';
@@ -11,6 +12,7 @@ class ScreenPaths {
   static String feed = '/feed';
   static String mypage = '/mypage';
   static String bookList = '/bookList';
+  static String searchList = '/searchList';
 }
 
 final appRouter = GoRouter(
@@ -58,14 +60,17 @@ final appRouter = GoRouter(
         },
       ),
     ),
-
-    // GoRoute(
-    //   path: ScreenPaths.bookList,
-    //   name: '/bookList',
-    //   pageBuilder: (context, state) => const CupertinoPage(child: BookListScreen()),
-    // ),
-
-    // AppRoute('/bookList', const BookListScreen(), useFade: true)
+    GoRoute(
+      path: ScreenPaths.searchList,
+      name: '/searchList',
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const BookSearchListScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    ),
   ],
 );
 
