@@ -14,17 +14,8 @@ class _BookSearchListScreenState extends State<BookSearchListScreen> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            // floating: true,
             elevation: 0,
             title: Text('책 검색하기'),
-            // actions: [
-            //   IconButton(
-            //     onPressed: () {
-            //       context.pushNamed('/searchList');
-            //     },
-            //     // icon: const Icon(Icons.search),
-            //   )
-            // ],
           ),
           SliverToBoxAdapter(
             child: Text('data'),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foxaac_app/logic/app_logic.dart';
 import 'package:foxaac_app/routes/router.dart';
 import 'package:foxaac_app/styles/styles.dart';
@@ -9,7 +10,7 @@ void main() {
   // start app
   registerSingletons();
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

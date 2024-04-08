@@ -1,23 +1,21 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foxaac_app/assets.dart';
-import 'package:foxaac_app/features/book_search/api_network_service.dart';
 import 'package:go_router/go_router.dart';
 
-class LadderScreen extends StatefulWidget {
+class LadderScreen extends ConsumerStatefulWidget {
   const LadderScreen({super.key});
 
   @override
-  State<LadderScreen> createState() => _LadderScreenState();
+  ConsumerState<LadderScreen> createState() => _LadderScreenState();
 }
 
-class _LadderScreenState extends State<LadderScreen> {
+class _LadderScreenState extends ConsumerState<LadderScreen> {
   @override
   Widget build(BuildContext context) {
-    Dio dio = Dio();
-    final DioNetworkService dioNetworkService = DioNetworkService(dio);
-    // dioNetworkService.get(AppConfigs.naverApiBaseUrl);
+    // String query = '';
+    // ref.read(bookListProvider.notifier).paginate(query: query);
 
     final size = MediaQuery.of(context).size;
     final List bookList = [
