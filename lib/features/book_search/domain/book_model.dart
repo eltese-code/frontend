@@ -24,5 +24,8 @@ class BookModel {
     required this.description,
   });
 
-  factory BookModel.fromJson(Map<String, dynamic> json) => _$BookModelFromJson(json);
+  factory BookModel.fromJson(Map<String, dynamic> json) =>
+      _$BookModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BookModelToJson(this);
 }

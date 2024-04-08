@@ -55,7 +55,7 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
-          context.pushNamed('/bookList');
+          context.pushNamed('bookList');
         },
         child: SvgPicture.asset(
           'assets/images/ladder/book.svg',
@@ -143,7 +143,8 @@ class ListItem extends StatelessWidget {
       ),
       child: Text(
         bookList[index],
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+        style: const TextStyle(
+            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
       ),
     );
   }

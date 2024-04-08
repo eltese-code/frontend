@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dart';
 import 'package:foxaac_app/features/book_search/provider/book_provider.dart';
 import 'package:foxaac_app/shared/widget/my_separator.dart';
+import 'package:go_router/go_router.dart';
 
 class BookListWidget extends ConsumerStatefulWidget {
   const BookListWidget({
@@ -44,72 +45,87 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
             final bookItem = data.items[index];
             final title = bookItem.title.split('(')[0];
 
-            return Column(
-              children: [
-                const MySeparator(),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: outsidePadding),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(insidePadding),
+            return GestureDetector(
+              onTap: () {
+                // context.push(
+                //   Uri(
+                //     path: '/bookDetail',
+                //     queryParameters: bookItem.toJson(),
+                //   ).toString(),
+                // );
+                context.goNamed(
+                  'bookDetail',
+                  extra: bookItem,
+                );
+              },
+              child: Column(
+                children: [
+                  const MySeparator(),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: outsidePadding),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(insidePadding),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: const Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                          child: Image.network(
+                            bookItem.image,
+                            height: imageHeight,
+                            width: imageWidth,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: gap),
+                        SizedBox(
+                          width: textWidth,
+                          height: imageHeight,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                bookItem.author,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                bookItem.description,
+                                maxLines: 6,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: const Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Image.network(
-                          bookItem.image,
-                          height: imageHeight,
-                          width: imageWidth,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(width: gap),
-                      SizedBox(
-                        width: textWidth,
-                        height: imageHeight,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              bookItem.author,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              bookItem.description,
-                              maxLines: 6,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );
