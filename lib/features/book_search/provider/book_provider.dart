@@ -5,38 +5,52 @@ import 'package:foxaac_app/features/book_search/provider/book_repository_provide
 import 'package:foxaac_app/shared/utils/logger.dart';
 
 final bookNotifierProvider =
-    StateNotifierProvider.family<BookNotifierProvider, AsyncValue<BookPaginationModel>, String>((ref, query) {
+    StateNotifierProvider<BookNotifierProvider, BookPaginationModel>((ref) {
   final bookRepository = ref.watch(bookRepositoryProvider);
-  // final query =
-  final notifier = BookNotifierProvider(bookRepository: bookRepository, query: query);
+  final notifier = BookNotifierProvider(
+    bookRepository: bookRepository,
+    // params: params,
+  );
 
   return notifier;
 });
 
-class BookNotifierProvider extends StateNotifier<AsyncValue<BookPaginationModel>> {
+class BookNotifierProvider extends StateNotifier<BookPaginationModel> {
   final BookRepository bookRepository;
-  final String query;
+  // final BookListParams params;
 
   BookNotifierProvider({
     required this.bookRepository,
-    required this.query,
-  }) : super(const AsyncValue.loading()) {
-    // get();
-    get();
-  }
+  }) : super(BookPaginationModel.initial());
 
-  Future<void> get() async {
+  Future<void> get({
+    required BookListParams params,
+  }) async {
     try {
-      state = const AsyncValue.loading();
-      logger.d('state: $state');
+      final res = await bookRepository.getBookList(bookListParams: params);
 
-      BookListParams bookListParams = BookListParams(query: query);
-      final result = await bookRepository.getBookList(bookListParams: bookListParams);
-
-      state = AsyncValue.data(result);
-      logger.d('state: $state');
+      if (state.start == 1) {
+        logger.d('검색');
+        state = res.copyWith(
+          state: BookPaginationModelState.data,
+        );
+      } else if (state.state == BookPaginationModelState.data &&
+          ((state.total - state.start - state.display) > 0)) {
+        logger.d('데이터가 이미 있을 때');
+        state = res.copyWith(
+          state: BookPaginationModelState.data,
+          items: [...state.items, ...res.items],
+        );
+      } else {
+        logger.d('아예 처음');
+        state = res.copyWith(
+          state: BookPaginationModelState.data,
+        );
+      }
     } catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = state.copyWith(
+        state: BookPaginationModelState.error,
+      );
       logger.d(e);
     }
   }

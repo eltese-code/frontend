@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foxaac_app/features/book_search/domain/book_list_params.dart';
 import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dart';
 import 'package:foxaac_app/features/book_search/provider/book_provider.dart';
+import 'package:foxaac_app/shared/utils/logger.dart';
 import 'package:foxaac_app/shared/widget/my_separator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,12 +20,30 @@ class BookListWidget extends ConsumerStatefulWidget {
 }
 
 class _BookListWidgetState extends ConsumerState<BookListWidget> {
+  final ScrollController scrollController = ScrollController();
+
+  // void scrollListener() {
+  //   if (scrollController.offset >
+  //       scrollController.position.maxScrollExtent - 300) {
+  //     // provider.paginate(fetchMore: true);
+  //     ref.read(bookNotifierProvider(const BookListParams()));
+  //   }
+  // }
+
+  @override
+  void initState() {
+    // scrollController.addListener(scrollListener);
+    final query = widget.query == '' ? 'ㄱ' : widget.query;
+    ref
+        .read(bookNotifierProvider.notifier)
+        .get(params: BookListParams(query: query));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final query = widget.query == '' ? 'ㄱ' : widget.query;
-
-    final AsyncValue<BookPaginationModel> result =
-        ref.watch(bookNotifierProvider(query));
+    final result = ref.watch(bookNotifierProvider);
+    logger.d('result state: ${result.state}');
 
     const imageWidth = 110.0;
     const imageHeight = 160.0;
@@ -36,102 +56,97 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
         gap -
         2 * (outsidePadding + insidePadding);
 
-    return result.when(
-      data: (data) {
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          itemCount: data.items.length,
-          itemBuilder: (context, index) {
-            final bookItem = data.items[index];
-            final title = bookItem.title.split('(')[0];
+    if ([BookPaginationModelState.loading, BookPaginationModelState.initial]
+        .contains(result.state)) {
+      logger.d('로딩!');
+      return const CircularProgressIndicator();
+    } else if (BookPaginationModelState.error == result.state) {
+      return const SizedBox();
+    } else {
+      return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: result.items.length,
+        itemBuilder: (context, index) {
+          final bookItem = result.items[index];
+          final title = bookItem.title.split('(')[0];
 
-            return GestureDetector(
-              onTap: () {
-                // context.push(
-                //   Uri(
-                //     path: '/bookDetail',
-                //     queryParameters: bookItem.toJson(),
-                //   ).toString(),
-                // );
-                context.goNamed(
-                  'bookDetail',
-                  extra: bookItem,
-                );
-              },
-              child: Column(
-                children: [
-                  const MySeparator(),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: outsidePadding),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(insidePadding),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 2,
-                                offset: const Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                          child: Image.network(
-                            bookItem.image,
-                            height: imageHeight,
-                            width: imageWidth,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(width: gap),
-                        SizedBox(
-                          width: textWidth,
-                          height: imageHeight,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                bookItem.author,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                bookItem.description,
-                                maxLines: 6,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+          return GestureDetector(
+            onTap: () {
+              context.goNamed(
+                'bookDetail',
+                extra: bookItem,
+              );
+            },
+            child: Column(
+              children: [
+                const MySeparator(),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: outsidePadding),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(insidePadding),
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-      error: (error, st) => Center(child: Text(error.toString())),
-      loading: () => const CircularProgressIndicator(),
-    );
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: const Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: Image.network(
+                          bookItem.image,
+                          height: imageHeight,
+                          width: imageWidth,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(width: gap),
+                      SizedBox(
+                        width: textWidth,
+                        height: imageHeight,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              bookItem.author,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              bookItem.description,
+                              maxLines: 6,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
 }
