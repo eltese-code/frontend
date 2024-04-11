@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foxaac_app/features/book_search/domain/book_list_params.dart';
 import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dart';
@@ -32,7 +33,7 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
 
   @override
   void initState() {
-    // scrollController.addListener(scrollListener);
+    logger.d('initState');
     final query = widget.query == '' ? 'ㄱ' : widget.query;
     ref
         .read(bookNotifierProvider.notifier)
@@ -54,7 +55,8 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
     final textWidth = MediaQuery.of(context).size.width -
         imageWidth -
         gap -
-        2 * (outsidePadding + insidePadding);
+        2 * (outsidePadding + insidePadding) -
+        5;
 
     if ([BookPaginationModelState.loading, BookPaginationModelState.initial]
         .contains(result.state)) {
@@ -101,11 +103,14 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
                             ),
                           ],
                         ),
-                        child: Image.network(
-                          bookItem.image,
-                          height: imageHeight,
-                          width: imageWidth,
-                          fit: BoxFit.cover,
+                        child: Hero(
+                          tag: bookItem.isbn,
+                          child: Image.network(
+                            bookItem.image,
+                            height: imageHeight,
+                            width: imageWidth,
+                            fit: BoxFit.cover,
+                          ).animate(delay: 2.seconds).shimmer(),
                         ),
                       ),
                       const SizedBox(width: gap),

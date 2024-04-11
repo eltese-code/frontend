@@ -9,7 +9,6 @@ final bookNotifierProvider =
   final bookRepository = ref.watch(bookRepositoryProvider);
   final notifier = BookNotifierProvider(
     bookRepository: bookRepository,
-    // params: params,
   );
 
   return notifier;
@@ -17,7 +16,6 @@ final bookNotifierProvider =
 
 class BookNotifierProvider extends StateNotifier<BookPaginationModel> {
   final BookRepository bookRepository;
-  // final BookListParams params;
 
   BookNotifierProvider({
     required this.bookRepository,

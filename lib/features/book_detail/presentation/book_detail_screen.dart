@@ -22,9 +22,12 @@ class BookDetailScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: 200,
-                      child: Image.network(book.image),
+                    Hero(
+                      tag: book.isbn,
+                      child: SizedBox(
+                        width: 200,
+                        child: Image.network(book.image),
+                      ),
                     ),
                     const SizedBox(height: 30),
                     Text(
