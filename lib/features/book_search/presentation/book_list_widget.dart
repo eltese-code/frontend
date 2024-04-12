@@ -23,28 +23,34 @@ class BookListWidget extends ConsumerStatefulWidget {
 class _BookListWidgetState extends ConsumerState<BookListWidget> {
   final ScrollController scrollController = ScrollController();
 
-  // void scrollListener() {
-  //   if (scrollController.offset >
-  //       scrollController.position.maxScrollExtent - 300) {
-  //     // provider.paginate(fetchMore: true);
-  //     ref.read(bookNotifierProvider(const BookListParams()));
-  //   }
-  // }
+  void scrollListener() {
+    if ((scrollController.position.maxScrollExtent) ==
+        scrollController.offset) {
+      logger.d('scroll');
+      ref.read(bookNotifierProvider.notifier).fetchMore(query: widget.query);
+    }
+  }
 
   @override
   void initState() {
-    logger.d('initState');
     final query = widget.query == '' ? 'ㄱ' : widget.query;
     ref
         .read(bookNotifierProvider.notifier)
         .get(params: BookListParams(query: query));
+
+    scrollController.addListener(scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final result = ref.watch(bookNotifierProvider);
-    logger.d('result state: ${result.state}');
 
     const imageWidth = 110.0;
     const imageHeight = 160.0;
@@ -66,6 +72,7 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
       return const SizedBox();
     } else {
       return ListView.builder(
+        controller: scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: result.items.length,
         itemBuilder: (context, index) {

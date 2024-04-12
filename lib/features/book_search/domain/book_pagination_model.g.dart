@@ -15,6 +15,9 @@ BookPaginationModel _$BookPaginationModelFromJson(Map<String, dynamic> json) =>
       items: (json['items'] as List<dynamic>)
           .map((e) => BookModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      state: $enumDecodeNullable(
+              _$BookPaginationModelStateEnumMap, json['state']) ??
+          BookPaginationModelState.data,
     );
 
 Map<String, dynamic> _$BookPaginationModelToJson(
@@ -25,4 +28,12 @@ Map<String, dynamic> _$BookPaginationModelToJson(
       'start': instance.start,
       'display': instance.display,
       'items': instance.items,
+      'state': _$BookPaginationModelStateEnumMap[instance.state]!,
     };
+
+const _$BookPaginationModelStateEnumMap = {
+  BookPaginationModelState.initial: 'initial',
+  BookPaginationModelState.loading: 'loading',
+  BookPaginationModelState.error: 'error',
+  BookPaginationModelState.data: 'data',
+};

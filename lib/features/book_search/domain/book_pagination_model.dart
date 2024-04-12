@@ -59,12 +59,12 @@ class BookPaginationModel {
     BookPaginationModelState? state,
   }) {
     return BookPaginationModel(
-      lastBuildDate: this.lastBuildDate,
-      total: this.total,
-      start: this.start,
-      display: this.display,
-      items: this.items,
-      state: this.state,
+      lastBuildDate: lastBuildDate ?? this.lastBuildDate,
+      total: total ?? this.total,
+      start: start ?? this.start,
+      display: display ?? this.display,
+      items: items ?? this.items,
+      state: state ?? this.state,
     );
   }
 
