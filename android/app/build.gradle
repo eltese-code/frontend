@@ -49,6 +49,11 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
+        // local.properties의 값 가져오기 
+        buildConfigField "String", "KAKAO_NATIVE_APP_KEY", properties['kakao_native_app_key']
+        // manifest에서 사용할 수 있도록
+        manifestPlaceholders = [KAKAO_NATIVE_APP_KEY: kakao_native_app_key]
     }
 
     buildTypes {

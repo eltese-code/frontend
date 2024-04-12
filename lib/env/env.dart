@@ -8,4 +8,6 @@ abstract class Env {
   static const String clientId = _Env.clientId;
   @EnviedField(varName: 'X-Naver-Client-Secret')
   static const String clientSecret = _Env.clientSecret;
+  @EnviedField(varName: 'kakao_native_app_key')
+  static const String kakaoNativeAppKey = _Env.kakaoNativeAppKey;
 }
