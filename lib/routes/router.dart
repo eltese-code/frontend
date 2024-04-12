@@ -5,10 +5,12 @@ import 'package:foxaac_app/features/feed/test_feed_screen_light.dart';
 import 'package:foxaac_app/features/home/ladder_screen.dart';
 import 'package:foxaac_app/features/mypage/mypage_screen.dart';
 import 'package:foxaac_app/features/presentation/book_list_screen.dart';
+import 'package:foxaac_app/features/user/sigin_in_screen.dart';
 import 'package:foxaac_app/ui/app_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
 class ScreenPaths {
+  static String signIn = '/signIn';
   static String home = '/home';
   static String feed = '/feed';
   static String mypage = '/mypage';
@@ -17,7 +19,7 @@ class ScreenPaths {
 }
 
 final appRouter = GoRouter(
-  initialLocation: ScreenPaths.home,
+  initialLocation: ScreenPaths.signIn,
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, router, navigator) {
@@ -82,17 +84,17 @@ final appRouter = GoRouter(
         ),
       ],
     ),
-    // GoRoute(
-    //   path: ScreenPaths.bookList,
-    //   name: 'bookList',
-    //   pageBuilder: (context, state) => CustomTransitionPage(
-    //     key: state.pageKey,
-    //     child: const BookListScreen(),
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    //       return FadeTransition(opacity: animation, child: child);
-    //     },
-    //   ),
-    // ),
+    GoRoute(
+      path: ScreenPaths.signIn,
+      name: 'signIn',
+      pageBuilder: (context, state) => CustomTransitionPage(
+        key: state.pageKey,
+        child: const SignInScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
+    ),
 
     // GoRoute(
     //   path: ScreenPaths.bookDetail,
