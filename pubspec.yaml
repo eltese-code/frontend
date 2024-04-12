@@ -26,6 +26,7 @@ dependencies:
   json_annotation: ^4.8.1
   envied: ^0.5.4+1
   flutter_animate: ^4.5.0
+  kakao_flutter_sdk_user: ^1.9.1+2
 
 dev_dependencies:
   flutter_test:
