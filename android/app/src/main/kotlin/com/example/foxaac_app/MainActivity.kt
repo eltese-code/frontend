@@ -1,4 +1,4 @@
-package com.example.foxaac_app
+package com.example.foxaac
 
 import io.flutter.embedding.android.FlutterActivity
 
