@@ -25,9 +25,7 @@ class BookNotifierProvider extends StateNotifier<BookPaginationModel> {
     required BookListParams params,
   }) async {
     try {
-      // state = state.copyWith(
-      //   state: BookPaginationModelState.loading,
-      // );
+      if (state.state == BookPaginationModelState.data) return;
 
       final res = await bookRepository.getBookList(bookListParams: params);
 
