@@ -6,6 +6,7 @@ import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dar
 import 'package:foxaac_app/features/book_search/provider/book_provider.dart';
 import 'package:foxaac_app/shared/utils/logger.dart';
 import 'package:foxaac_app/shared/widget/my_separator.dart';
+import 'package:foxaac_app/shared/widget/my_shadow_container.dart';
 import 'package:go_router/go_router.dart';
 
 class BookListWidget extends ConsumerStatefulWidget {
@@ -99,18 +100,8 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
                   ),
                   child: Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 2,
-                              offset: const Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: Hero(
+                      MyShadowContainer(
+                        childWidget: Hero(
                           tag: bookItem.isbn,
                           child: Image.network(
                             bookItem.image,
