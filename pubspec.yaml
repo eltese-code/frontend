@@ -27,6 +27,8 @@ dependencies:
   envied: ^0.5.4+1
   flutter_animate: ^4.5.0
   kakao_flutter_sdk_user: ^1.9.1+2
+  custom_date_range_picker: ^1.0.10
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
