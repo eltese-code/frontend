@@ -19,7 +19,7 @@ class ScreenPaths {
 }
 
 final appRouter = GoRouter(
-  initialLocation: ScreenPaths.signIn,
+  initialLocation: ScreenPaths.home,
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, router, navigator) {

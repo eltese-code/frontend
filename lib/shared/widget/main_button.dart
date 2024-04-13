@@ -15,31 +15,30 @@ class MainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SizedBox(
-        height: 50,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 0,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: _style.colors.primaryColor,
+              borderRadius: const BorderRadius.all(
                 Radius.circular(20),
               ),
             ),
-            backgroundColor:
-                isCancle ? const Color(0xffD9D9D9) : _style.colors.primaryColor,
-          ),
-          onPressed: () {},
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: 18,
-              color: isCancle ? Colors.black : Colors.white,
-              fontWeight: isCancle ? FontWeight.w300 : FontWeight.w500,
+            height: 50,
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: isCancle ? Colors.black : Colors.white,
+                  fontWeight: isCancle ? FontWeight.w300 : FontWeight.w500,
+                ),
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

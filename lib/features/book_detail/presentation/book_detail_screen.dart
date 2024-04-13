@@ -30,8 +30,8 @@ class BookDetailScreen extends ConsumerWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
             context: context,
-            builder: (context) {
-              return BookAddSheet(book: book);
+            builder: (_) {
+              return BookAddSheet(bookModel: book);
             },
           );
         },
