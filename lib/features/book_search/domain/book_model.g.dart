@@ -7,7 +7,7 @@ part of 'book_model.dart';
 // **************************************************************************
 
 BookModel _$BookModelFromJson(Map<String, dynamic> json) => BookModel(
-      title: json['title'] as String,
+      title: BookModel.jsonToTitle(json['title'] as String),
       link: json['link'] as String,
       image: json['image'] as String,
       author: json['author'] as String,

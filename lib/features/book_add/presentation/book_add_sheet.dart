@@ -25,7 +25,6 @@ class BookAddSheet extends ConsumerWidget {
     final dates = ref.watch(datesProvider);
     FocusNode textFocus = FocusNode();
 
-    logger.d('watch!: ${dates.startDate}, ${dates.endDate}');
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 30,
@@ -41,7 +40,7 @@ class BookAddSheet extends ConsumerWidget {
           runSpacing: 20,
           children: [
             Text(
-              book.title.split('(')[0],
+              book.title,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

@@ -58,7 +58,7 @@ class BookDetailScreen extends ConsumerWidget {
                     const SizedBox(height: 30),
                     Text(
                       textAlign: TextAlign.center,
-                      book.title.split('(')[0],
+                      book.title,
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -4,6 +4,7 @@ part 'book_model.g.dart';
 
 @JsonSerializable()
 class BookModel {
+  @JsonKey(fromJson: jsonToTitle)
   final String title;
   final String link;
   final String image;
@@ -28,4 +29,8 @@ class BookModel {
       _$BookModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookModelToJson(this);
+
+  static String jsonToTitle(String title) {
+    return title.split('(')[0];
+  }
 }

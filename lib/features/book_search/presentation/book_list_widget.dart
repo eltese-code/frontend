@@ -78,7 +78,7 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
         itemCount: result.items.length,
         itemBuilder: (context, index) {
           final bookItem = result.items[index];
-          final title = bookItem.title.split('(')[0];
+          final title = bookItem.title;
 
           return GestureDetector(
             onTap: () {
