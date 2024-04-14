@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foxaac_app/features/book_detail/presentation/book_detail_screen.dart';
 import 'package:foxaac_app/features/book_search/domain/book_model.dart';
+import 'package:foxaac_app/features/book_search/presentation/book_list_screen.dart';
 import 'package:foxaac_app/features/feed/test_feed_screen_light.dart';
 import 'package:foxaac_app/features/home/ladder_screen.dart';
 import 'package:foxaac_app/features/mypage/mypage_screen.dart';
-import 'package:foxaac_app/features/presentation/book_list_screen.dart';
 import 'package:foxaac_app/features/user/sigin_in_screen.dart';
 import 'package:foxaac_app/ui/app_scaffold.dart';
 import 'package:go_router/go_router.dart';
@@ -15,11 +15,17 @@ class ScreenPaths {
   static String feed = '/feed';
   static String mypage = '/mypage';
   static String bookList = 'bookList';
-  static String bookDetail = 'bookDetail';
+  static String bookDetail = '/bookDetail';
 }
+
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+final _homeNavigatorKey = GlobalKey<NavigatorState>();
+final _feedNavigatorKey = GlobalKey<NavigatorState>();
+final _mypageNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   initialLocation: ScreenPaths.home,
+  navigatorKey: rootNavigatorKey,
   routes: [
     StatefulShellRoute.indexedStack(
       builder: (context, router, navigator) {
@@ -27,39 +33,29 @@ final appRouter = GoRouter(
       },
       branches: [
         StatefulShellBranch(
+          navigatorKey: _homeNavigatorKey,
           routes: [
             GoRoute(
                 path: ScreenPaths.home,
                 builder: (context, state) => const LadderScreen(),
                 routes: [
                   GoRoute(
+                    // parentNavigatorKey: rootNavigatorKey,
                     path: ScreenPaths.bookList,
-                    name: 'bookList',
-                    routes: [
-                      GoRoute(
-                        path: ScreenPaths.bookDetail,
-                        name: 'bookDetail',
-                        pageBuilder: (context, state) {
-                          final book = state.extra as BookModel;
-
-                          return CustomTransitionPage(
-                            key: state.pageKey,
-                            child: BookDetailScreen(book: book),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              return FadeTransition(
-                                  opacity: animation, child: child);
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                    name: ScreenPaths.bookList,
                     pageBuilder: (context, state) => CustomTransitionPage(
                       key: state.pageKey,
                       child: const BookListScreen(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(opacity: animation, child: child);
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
                       },
                     ),
                   ),
@@ -67,6 +63,7 @@ final appRouter = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          navigatorKey: _feedNavigatorKey,
           routes: [
             GoRoute(
               path: ScreenPaths.feed,
@@ -75,6 +72,7 @@ final appRouter = GoRouter(
           ],
         ),
         StatefulShellBranch(
+          navigatorKey: _mypageNavigatorKey,
           routes: [
             GoRoute(
               path: ScreenPaths.mypage,
@@ -84,9 +82,35 @@ final appRouter = GoRouter(
         ),
       ],
     ),
+
     GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
+      path: ScreenPaths.bookDetail,
+      name: ScreenPaths.bookDetail,
+      pageBuilder: (context, state) {
+        final book = state.extra as BookModel;
+
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: BookDetailScreen(book: book),
+          transitionsBuilder: (
+            context,
+            animation,
+            secondaryAnimation,
+            child,
+          ) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+      },
+    ),
+    GoRoute(
+      parentNavigatorKey: rootNavigatorKey,
       path: ScreenPaths.signIn,
-      name: 'signIn',
+      name: ScreenPaths.signIn,
       pageBuilder: (context, state) => CustomTransitionPage(
         key: state.pageKey,
         child: const SignInScreen(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foxaac_app/assets.dart';
+import 'package:foxaac_app/routes/router.dart';
 import 'package:go_router/go_router.dart';
 
 class LadderScreen extends ConsumerStatefulWidget {
@@ -14,9 +15,6 @@ class LadderScreen extends ConsumerStatefulWidget {
 class _LadderScreenState extends ConsumerState<LadderScreen> {
   @override
   Widget build(BuildContext context) {
-    // String query = '';
-    // ref.read(bookListProvider.notifier).paginate(query: query);
-
     final size = MediaQuery.of(context).size;
     final List bookList = [
       '지구 끝의 온실',
@@ -55,7 +53,7 @@ class _LadderScreenState extends ConsumerState<LadderScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () {
-          context.pushNamed('bookList');
+          context.pushNamed(ScreenPaths.bookList);
         },
         child: SvgPicture.asset(
           'assets/images/ladder/book.svg',
