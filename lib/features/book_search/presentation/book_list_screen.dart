@@ -23,7 +23,9 @@ class _BookListScreenState extends State<BookListScreen> {
                 onPressed: () {
                   // context.pushNamed('searchList');
                   showSearch(
-                      context: context, delegate: CustomSearchDelegate());
+                    context: context,
+                    delegate: CustomSearchDelegate(),
+                  );
                 },
                 icon: const Icon(Icons.search),
               )

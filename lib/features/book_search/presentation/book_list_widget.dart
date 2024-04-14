@@ -3,11 +3,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foxaac_app/features/book_search/domain/book_list_params.dart';
 import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dart';
+import 'package:foxaac_app/features/book_search/presentation/book_list_shimmer_card.dart';
 import 'package:foxaac_app/features/book_search/provider/book_provider.dart';
+import 'package:foxaac_app/routes/router.dart';
 import 'package:foxaac_app/shared/utils/logger.dart';
 import 'package:foxaac_app/shared/widget/my_separator.dart';
 import 'package:foxaac_app/shared/widget/my_shadow_container.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookListWidget extends ConsumerStatefulWidget {
   const BookListWidget({
@@ -71,7 +74,21 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
     if ([BookPaginationModelState.loading, BookPaginationModelState.initial]
         .contains(result.state)) {
       logger.d('로딩!');
-      return const CircularProgressIndicator();
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: ListView.builder(
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            return BookListShimmerCard(
+              imageHeight: imageHeight,
+              imageWidth: imageWidth,
+              textWidth: textWidth,
+              gap: gap,
+            );
+          },
+        ),
+      );
     } else if (BookPaginationModelState.error == result.state) {
       return const SizedBox();
     } else {
@@ -87,12 +104,8 @@ class _BookListWidgetState extends ConsumerState<BookListWidget> {
 
             return GestureDetector(
               onTap: () {
-                // context.goNamed(
-                //   'bookDetail',
-                //   extra: bookItem,
-                // );
                 context.pushNamed(
-                  'bookDetail',
+                  ScreenPaths.bookDetail,
                   extra: bookItem,
                 );
               },
