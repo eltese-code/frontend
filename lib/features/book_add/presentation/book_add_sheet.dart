@@ -25,149 +25,163 @@ class BookAddSheet extends ConsumerStatefulWidget {
 
 class _BookAddSheetState extends ConsumerState<BookAddSheet> {
   late TextEditingController _textEditingController;
+  late ScrollController _scrollController;
+  late FocusNode _textFocus;
 
   @override
   void initState() {
     _textEditingController = TextEditingController();
+    _scrollController = ScrollController();
+    _textFocus = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
+    _scrollController.dispose();
+    _textFocus.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     int remainingCharacters = ref.watch(_remainingCharactersProvider);
-    FocusNode textFocus = FocusNode();
 
     final book = ref.watch(_bookProvider(widget.bookModel));
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 30,
-        horizontal: 20,
-      ),
-      child: GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: textFocus.unfocus,
-        child: Wrap(
-          runSpacing: 20,
-          children: [
-            Text(
-              book.bookTitle,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _textFocus.unfocus,
+      child: Container(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 30,
+            horizontal: 20,
+          ),
+          child: Wrap(
+            runSpacing: 20,
+            children: [
+              Text(
+                book.bookTitle,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Row(
-              children: [
-                renderThumbIconButton(
-                  ref,
-                  bookModel: widget.bookModel,
-                  book: book,
-                ),
-                const SizedBox(width: 20),
-                renderThumbIconButton(
-                  ref,
-                  bookModel: widget.bookModel,
-                  book: book,
-                  isTumbDown: true,
-                ),
-              ],
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BookStateButton(text: '읽은 책', isActive: true),
-                BookStateButton(text: '읽고 싶은 책'),
-                BookStateButton(text: '읽고 있는 책'),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('한줄평'),
-                const SizedBox(height: 5),
-                TextField(
-                  focusNode: textFocus,
-                  controller: _textEditingController,
-                  maxLines: 5,
-                  maxLength: 140,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(10),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      borderSide: BorderSide(
-                        color: Color(0xffD7D7D7),
-                      ),
-                    ),
-                    hintText: '내용을 입력해 주세요! (최대 140자)',
-                    counterText: '$remainingCharacters/140',
-                    counterStyle: TextStyle(
-                      color:
-                          remainingCharacters < 0 ? Colors.red : Colors.black,
-                    ),
+              Row(
+                children: [
+                  renderThumbIconButton(
+                    ref,
+                    bookModel: widget.bookModel,
+                    book: book,
                   ),
-                  onChanged: (_) {
-                    ref.read(_remainingCharactersProvider.notifier).update(
-                          (state) => (140 - _textEditingController.text.length),
-                        );
-                  },
-                ),
-                const Text('독서 기간'),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        showDatePicker(
-                          context,
-                          ref,
-                          book: book,
-                          onApplyClick: (start, end) {
-                            ref
-                                .read(_bookProvider(widget.bookModel).notifier)
-                                .update(
-                                  (state) => book.copyWith(
-                                    startDate: start.toString(),
-                                    endDate: end.toString(),
-                                  ),
-                                );
-                          },
-                          onCancelClick: () {},
-                        );
-                      },
-                      icon: const Icon(Icons.calendar_month),
-                    ),
-                    renderDate(date: book.startDate),
-                    const SizedBox(width: 5),
-                    const Text('부터'),
-                    const SizedBox(width: 20),
-                    renderDate(date: book.endDate),
-                    const Text('까지'),
-                  ],
-                ),
-              ],
-            ),
-            AnimationButton(
-              upperBound: 0.02,
-              isDone: true,
-              onTap: () {
-                ref.read(_bookProvider(widget.bookModel).notifier).update(
-                      (state) => book.copyWith(
-                          bookComment: _textEditingController.text),
-                    );
-              },
-              child: const MainButton(
-                text: '완료',
+                  const SizedBox(width: 20),
+                  renderThumbIconButton(
+                    ref,
+                    bookModel: widget.bookModel,
+                    book: book,
+                    isTumbDown: true,
+                  ),
+                ],
               ),
-            ),
-          ],
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BookStateButton(text: '읽은 책', isActive: true),
+                  BookStateButton(text: '읽고 싶은 책'),
+                  BookStateButton(text: '읽고 있는 책'),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('한줄평'),
+                  const SizedBox(height: 5),
+                  TextField(
+                    focusNode: _textFocus,
+                    controller: _textEditingController,
+                    maxLines: 5,
+                    maxLength: 140,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(10),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        borderSide: BorderSide(
+                          color: Color(0xffD7D7D7),
+                        ),
+                      ),
+                      hintText: '내용을 입력해 주세요! (최대 140자)',
+                      counterText: '$remainingCharacters/140',
+                      counterStyle: TextStyle(
+                        color:
+                            remainingCharacters < 0 ? Colors.red : Colors.black,
+                      ),
+                    ),
+                    onChanged: (_) {
+                      ref.read(_remainingCharactersProvider.notifier).update(
+                            (state) =>
+                                (140 - _textEditingController.text.length),
+                          );
+                    },
+                  ),
+                  const Text('독서 기간'),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDatePicker(
+                            context,
+                            ref,
+                            book: book,
+                            onApplyClick: (start, end) {
+                              ref
+                                  .read(
+                                      _bookProvider(widget.bookModel).notifier)
+                                  .update(
+                                    (state) => book.copyWith(
+                                      startDate: start.toString(),
+                                      endDate: end.toString(),
+                                    ),
+                                  );
+                            },
+                            onCancelClick: () {},
+                          );
+                        },
+                        icon: const Icon(Icons.calendar_month),
+                      ),
+                      const SizedBox(width: 5),
+                      renderDate(date: book.startDate),
+                      const SizedBox(width: 5),
+                      const Text('부터'),
+                      const SizedBox(width: 20),
+                      renderDate(date: book.endDate),
+                      const SizedBox(width: 5),
+                      const Text('까지'),
+                    ],
+                  ),
+                ],
+              ),
+              AnimationButton(
+                upperBound: 0.02,
+                isDone: true,
+                onTap: () {
+                  ref.read(_bookProvider(widget.bookModel).notifier).update(
+                        (state) => book.copyWith(
+                            bookComment: _textEditingController.text),
+                      );
+                },
+                child: const MainButton(
+                  text: '완료',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
