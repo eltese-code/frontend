@@ -1,25 +1,24 @@
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:foxaac_app/configs/app_configs.dart';
 import 'package:foxaac_app/env/env.dart';
 import 'package:foxaac_app/features/book_search/domain/book_list_params.dart';
 import 'package:foxaac_app/features/book_search/domain/book_pagination_model.dart';
-import 'package:foxaac_app/shared/dio/dio.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final bookRepositoryProvider = Provider((ref) {
-  final dio = ref.read(dioProvider);
-  final repository = BookRepository(dio, baseUrl: AppConfigs.naverApiBaseUrl);
-
-  return repository;
-});
+abstract class BookSearchDataSource {
+  Future<BookPaginationModel> getBookList({
+    required BookListParams bookListParams,
+  });
+}
 
 // retrofit 헤더에 Env 변수가 제대로 들어가지 않아서 dio로 작성
-class BookRepository {
+class BookSearchRemoteDataSource extends BookSearchDataSource {
   final Dio dio;
-  final String baseUrl;
 
-  BookRepository(this.dio, {required this.baseUrl});
+  BookSearchRemoteDataSource(this.dio);
 
+  final baseUrl = AppConfigs.naverApiBaseUrl;
+
+  @override
   Future<BookPaginationModel> getBookList({
     required BookListParams bookListParams,
   }) async {

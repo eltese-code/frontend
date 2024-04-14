@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:foxaac_app/features/book_detail/presentation/book_detail_screen.dart';
 import 'package:foxaac_app/features/book_search/domain/book_model.dart';
-import 'package:foxaac_app/features/book_search/presentation/book_list_screen.dart';
+import 'package:foxaac_app/features/book_search/presentation/screen/book_list_screen.dart';
 import 'package:foxaac_app/features/feed/test_feed_screen_light.dart';
 import 'package:foxaac_app/features/home/ladder_screen.dart';
 import 'package:foxaac_app/features/mypage/mypage_screen.dart';

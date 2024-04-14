@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foxaac_app/features/book_search/presentation/book_list_widget.dart';
+import 'package:foxaac_app/features/book_search/presentation/screen/book_list_widget.dart';
 import 'package:foxaac_app/main.dart';
 
 class CustomSearchDelegate extends SearchDelegate<String> {
